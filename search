@@ -1,0 +1,91 @@
+ <div class="input-group">
+                            <input type="text" id="txtSearchByColumn" class="search-query form-control" ng-model="matterSearch" placeholder="Search by column" />
+                            <span class="input-group-btn">
+                                <button class="btn" type="button">
+                                    <span class="icon-search" id="btnSearchByColumn"></span>
+                                </button>
+                            </span>
+                        </div>
+<div class="matter-item" id="{{matter.docketNumber}}" ng-repeat="matter in filtered = ( MatterDataList.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))) | filter:(matterSearch|MatterSearchFilter )">
+</div>
+app.filter('SearchFilter', [function () {
+    return function (text) {
+        if (typeof text != 'undefined' && text != "") {
+            return function (value) {
+                var searchTerm = text.toLowerCase();
+                if (angular.isObject(value)) {
+                    var found = false;
+                  
+                    if (typeof (value.matterName) != 'undefined') {
+                        found = found || value.matterName.toLowerCase().indexOf(searchTerm) != '-1';
+                    }
+                    if (!found && typeof (value.clientRegionInfo) != 'undefined') {
+                        found = found || value.clientRegionInfo.toLowerCase().indexOf(searchTerm) != '-1';
+                    }
+                    if (!found && typeof (value.applicationNumber) != 'undefined') {
+                        found = found || value.applicationNumber.toLowerCase().indexOf(searchTerm) != '-1';
+                    }
+                    if (!found && typeof (value.patentNumber) != 'undefined') {
+                        found = found || value.patentNumber.toLowerCase().indexOf(searchTerm) != '-1';
+                    }
+                    if (!found && typeof (value.matterStatus) != 'undefined') {
+                        found = found || value.matterStatus.toLowerCase().indexOf(searchTerm) != '-1';
+                    }
+                    if (!found && typeof (value.matterSubStatus) != 'undefined') {
+                        found = found || value.matterSubStatus.toLowerCase().indexOf(searchTerm) != '-1';
+                    }
+                    if (!found && typeof (value.docketNumber) != 'undefined') {
+                        found = found || value.docketNumber.toLowerCase().indexOf(searchTerm) != '-1';
+                    }
+                    if (!found && typeof (value.matterID) != 'undefined') {
+                        found = found || value.matterID.toLowerCase().indexOf(searchTerm) != '-1';
+                    }
+                    if (!found && typeof (value.country) != 'undefined') {
+                        found = found || value.country.toLowerCase().indexOf(searchTerm) != '-1';
+                    }
+                    if (!found && typeof (value.clientName) != 'undefined') {
+                        found = found || value.clientName.toLowerCase().indexOf(searchTerm) != '-1';
+                    }
+                    if (!found && typeof (value.clientReferenceNumber) != 'undefined') {
+                        found = found || value.clientReferenceNumber.toLowerCase().indexOf(searchTerm) != '-1';
+                    }
+                    if (!found && typeof (value.pointAttorneyName) != 'undefined') {
+                        found = found || value.pointAttorneyName.toLowerCase().indexOf(searchTerm) != '-1';
+                    }
+                    if (!found && typeof (value.responsibleAttorneyName) != 'undefined') {
+                        found = found || value.responsibleAttorneyName.toLowerCase().indexOf(searchTerm) != '-1';
+                    }
+                    if (!found && typeof (value.assistantTimekeeperName) != 'undefined') {
+                        found = found || value.assistantTimekeeperName.toLowerCase().indexOf(searchTerm) != '-1';
+                    }
+                    if (!found && typeof (value.ffPointName) != 'undefined') {
+                        found = found || value.ffPointName.toLowerCase().indexOf(searchTerm) != '-1';
+                    }
+                    if (!found && typeof (value.ffRespName) != 'undefined') {
+                        found = found || value.ffRespName.toLowerCase().indexOf(searchTerm) != '-1';
+                    }
+
+                    if (!found && typeof (value.grantDate) != 'undefined') {
+                        if (value.grantDate != null && value.grantDate != "")
+                        {
+                             var grantDate = common.getFormattedDate(value.grantDate);
+                             found = found || grantDate.indexOf(searchTerm) != '-1';
+                        }
+                       
+                    }
+                    if (!found && typeof (value.applicationDate) != 'undefined') {
+                        var applicationDate = common.getFormattedDate(new Date(value.applicationDate));
+                        found = found || applicationDate.indexOf(searchTerm) != '-1';
+                    }
+                    return found;
+                } else {
+                    return false;
+                }
+            };
+        } else {
+            return function () {
+                return true;
+            }
+        }
+    }
+}]);
